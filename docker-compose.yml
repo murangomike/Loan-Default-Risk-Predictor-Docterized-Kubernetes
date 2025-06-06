@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  loan-predictor:
+    build: .
+    container_name: loan-default-predictor
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount model files directory
+      - ./models:/app/models
+      # Mount templates for development (optional)
+      - ./templates:/app/templates
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
