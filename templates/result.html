@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Assessment Result</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .result-container {
+            padding: 40px;
+        }
+
+        .risk-indicator {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-high {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        .risk-low {
+            background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+            color: white;
+        }
+
+        .risk-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .risk-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .risk-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .probability-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .probability-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 2s ease-in-out;
+            animation: fillBar 2s ease-in-out;
+        }
+
+        @keyframes fillBar {
+            from { width: 0%; }
+        }
+
+        .probability-high {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a52 100%);
+        }
+
+        .probability-low {
+            background: linear-gradient(90deg, #51cf66 0%, #40c057 100%);
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .recommendation h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .recommendation p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .recommendation ul {
+            color: #666;
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .confidence-meter {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .confidence-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            background: conic-gradient(#667eea 0deg, #667eea {{ confidence * 360 }}deg, #e9ecef {{ confidence * 360 }}deg, #e9ecef 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confidence-inner {
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .confidence-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .confidence-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .result-container {
+                padding: 20px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .risk-title {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-pie"></i> Risk Assessment Complete</h1>
+            <p>AI-powered loan default prediction analysis</p>
+        </div>
+
+        <div class="result-container">
+            <div class="risk-indicator {% if prediction == 1 %}risk-high{% else %}risk-low{% endif %}">
+                <div class="risk-icon">
+                    {% if prediction == 1 %}
+                        <i class="fas fa-exclamation-triangle"></i>
+                    {% else %}
+                        <i class="fas fa-check-circle"></i>
+                    {% endif %}
+                </div>
+                <div class="risk-title">{{ risk_level }}</div>
+                <div class="risk-subtitle">
+                    {% if prediction == 1 %}
+                        High probability of loan default detected
+                    {% else %}
+                        Low risk - Good candidate for loan approval
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="metric-value">{{ (probability * 100) | round(1) }}%</div>
+                    <div class="metric-label">Default Probability</div>
+                    <div class="probability-bar">
+                        <div class="probability-fill {% if probability > 0.5 %}probability-high{% else %}probability-low{% endif %}" 
+                             style="width: {{ (probability * 100) | round(1) }}%"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="metric-value">{{ (confidence * 100) | round(1) }}%</div>
+                    <div class="metric-label">Model Confidence</div>
+                    <div class="confidence-meter">
+                        <div class="confidence-circle">
+                            <div class="confidence-inner">
+                                <div class="confidence-value">{{ (confidence * 100) | round(0) }}%</div>
+                                <div class="confidence-label">Confidence</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <h3><i class="fas fa-lightbulb"></i> Recommendation</h3>
+                {% if prediction == 1 %}
+                    <p><strong>⚠️ High Risk Assessment:</strong> This application shows elevated risk factors for loan default.</p>
+                    <p><strong>Recommended Actions:</strong></p>
+                    <ul>
+                        <li>Request additional documentation and verification</li>
+                        <li>Consider requiring a co-signer or collateral</li>
+                        <li>Offer a smaller loan amount with higher interest rate</li>
+                        <li>Implement stricter repayment monitoring</li>
+                    </ul>
+                {% else %}
+                    <p><strong>✅ Low Risk Assessment:</strong> This application demonstrates favorable characteristics for loan approval.</p>
+                    <p><strong>Recommended Actions:</strong></p>
+                    <ul>
+                        <li>Proceed with standard loan processing</li>
+                        <li>Consider offering competitive interest rates</li>
+                        <li>Opportunity for relationship building and cross-selling</li>
+                        <li>Standard monitoring and follow-up procedures</li>
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    New Assessment
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <i class="fas fa-print"></i>
+                    Print Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add animation delay for better UX
+        setTimeout(() => {
+            document.querySelector('.probability-fill').style.width = '{{ (probability * 100) | round(1) }}%';
+        }, 500);
+
+        // Add some interactive elements
+        document.querySelectorAll('.metric-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
